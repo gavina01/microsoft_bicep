@@ -1,0 +1,19 @@
+{
+	"name": "Bicep Authoring devcontainer",
+	"dockerFile": "Dockerfile",
+	"forwardPorts": [ 7071 ],
+	"settings": {
+		"terminal.integrated.shell.linux": "/usr/bin/pwsh"
+	},
+	"extensions": [
+		"/tmp/vscode-bicep.vsix",
+		"ms-vscode.powershell",
+		"msazurermtools.azurerm-vscode-tools"
+	],
+
+	"mounts": [
+		"type=volume,source=bicepazpowershellcreds,target=/root/.Azure",
+		"type=volume,source=bicepazureclicreds,target=/root/.azure"
+	]
+
+}

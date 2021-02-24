@@ -1,0 +1,69 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "type": "string",
+      "defaultValue": "australiaeast",
+      "allowedValues": [
+        "australiaeast",
+        "eastus",
+        "westus"
+      ]
+    },
+    "storageName": {
+      "type": "string",
+      "defaultValue": "unqiuestoragename"
+    },
+    "serverFarmId": {
+      "type": "string",
+      "defaultValue": "[resourceId('Microsft.Web.sites', 'mywebsite')]"
+    },
+    "globalRedundancy": {
+      "type": "bool",
+      "defaultValue": true
+    }
+  },
+  "functions": [],
+  "variables": {
+    "storageSku": "Standard_LRS",
+    "namePrefix": "trial",
+    "storageaccountName": "[format('{0}{1}', variables('namePrefix'), uniqueString(resourceGroup().id))]",
+    "tenary": "[if(parameters('globalRedundancy'), true(), false())]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "apiVersion": "2020-08-01-preview",
+      "name": "[variables('storageaccountName')]",
+      "location": "[parameters('location')]",
+      "kind": "Storage",
+      "sku": {
+        "name": "[variables('storageSku')]"
+      },
+      "properties": {}
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+      "apiVersion": "2020-08-01-preview",
+      "name": "[format('{0}/default.logs', variables('storageaccountName'))]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts', variables('storageaccountName'))]"
+      ]
+    }
+  ],
+  "outputs": {
+    "storageId": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.Storage/storageAccounts', variables('storageaccountName'))]"
+    },
+    "storageOutputName": {
+      "type": "string",
+      "value": "[variables('storageaccountName')]"
+    },
+    "storageOutputEndpointName": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.Storage/storageAccounts', variables('storageaccountName'))).primaryEndpoints.blob]"
+    }
+  }
+}
