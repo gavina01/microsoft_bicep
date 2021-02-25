@@ -1,23 +1,16 @@
-param accountName string
+param location string = 'eastus'
+param namePrefix string = 'uniquestorage001' // must be globally unique
 
-param databaseNames array {
-  // default: ["name1" "name2"]
-}
+var storageName = 'secretStorage'
+var storageSku = 'Standard_LRS' // declare variable and assign value
 
-resource[] sqlDatabases 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases@2020-06-01-preview' = {
-  for databaseName in databaseNames: {
-    name: '{accountName}/{databaseName}'
-    properties:{
-      resources: {
-        id: databaseName
-      }
-      options: {
-        
-      }
+resource stg 'Microsoft.Storage/storageAccounts@2019-06-01' = {
+    name: '${namePrefix}${storageName}'
+    location: location
+    kind: 'Storage'
+    sku: {
+        name: storageSku // reference variable
     }
-  }
 }
 
-output sqlDatabases array = [
-  for da
-]
+output storageId string = stg.id // output resourceId of storage account

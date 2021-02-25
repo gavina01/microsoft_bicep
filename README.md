@@ -54,6 +54,10 @@ VSCode
 https://github.com/Azure/bicep
 
 
+--Azure Connect
+Connect-AzAccount -UseDeviceAuthentication 
+az login
+
 --Deployment
 New-AzResourceGroup -Name trialbicep-rg -Location australiaeast
 New-AzResourceGroupDeployment -TemplateFile ./main.json -ResourceGroupName trialbicep-rg
@@ -65,4 +69,5 @@ New-AzResourceGroupDeployment -TemplateFile ./main.json -ResourceGroupName trial
 --automatically get dependson, reference to symbolic name
 
 Bicep Modules
+    -- Modules
 

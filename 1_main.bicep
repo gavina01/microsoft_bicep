@@ -32,7 +32,6 @@ resource stg  'Microsoft.Storage/storageAccounts@2020-08-01-preview' = {
   }
 } 
 
-
 resource blob 'Microsoft.Storage/storageAccounts/blobServices/containers@2020-08-01-preview' = {
   name: '${stg.name}/default.logs'
 }
